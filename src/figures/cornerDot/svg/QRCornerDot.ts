@@ -76,7 +76,6 @@ export default class QRCornerDot {
   }
 
   _drawDropIn(args: DrawArgs): void {
-    // this._basicSquare({ x, y, size, rotation });
     const { size, x, y } = args;
     console.log(args);
 
@@ -94,7 +93,6 @@ export default class QRCornerDot {
         h ${size / -1.2}
         q -5,0 -5,-5
         z`;
-        console.log(attr);
         this._element.setAttribute("d", attr);
       }
     });
