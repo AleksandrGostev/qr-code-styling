@@ -19,6 +19,9 @@ export default class QRCornerDot {
       case cornerDotTypes.square:
         drawFunction = this._drawSquare;
         break;
+      case cornerDotTypes.dropIn:
+        drawFunction = this._drawDropIn;
+        break;
       case cornerDotTypes.dot:
       default:
         drawFunction = this._drawDot;
@@ -70,5 +73,30 @@ export default class QRCornerDot {
 
   _drawSquare({ x, y, size, rotation }: DrawArgs): void {
     this._basicSquare({ x, y, size, rotation });
+  }
+
+  _drawDropIn(args: DrawArgs): void {
+    // this._basicSquare({ x, y, size, rotation });
+    const { size, x, y } = args;
+    console.log(args);
+
+    this._rotateFigure({
+      ...args,
+      rotation: args.rotation === 0 ? 3.15 : (args.rotation || 0) * 3,
+      draw: () => {
+        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element.setAttribute("clip-rule", "evenodd");
+        const attr = `M ${x},${y}
+        h ${size / 1.1}
+        q 5,0 5,5
+        v ${size / 1.2}
+        q 0,5 -5,5
+        h ${size / -1.2}
+        q -5,0 -5,-5
+        z`;
+        console.log(attr);
+        this._element.setAttribute("d", attr);
+      }
+    });
   }
 }

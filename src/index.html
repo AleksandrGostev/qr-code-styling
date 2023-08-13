@@ -7,6 +7,7 @@
     <body>
         <div id="canvas"></div>
         <div id="canvas2"></div>
+        <div id="canvas3"></div>
         <script type="text/javascript">
             const options = {
               width: 500,
@@ -14,30 +15,17 @@
               data: "h",
               image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
               dotsOptions: {
-                type: "extra-rounded",
-                gradient: {
-                  type: "linear", //radial,
-                  rotation: Math.PI/2,
-                  colorStops: [{ offset: 0, color: 'blue' }, { offset: 0.5, color: 'red' }, { offset: 1, color: 'green' }]
-                },
+                type: "rounded",
               },
               cornersSquareOptions: {
-                type: "rounded",
-                gradient: {
-                  type: "linear",
-                  rotation: Math.PI * 0.2,
-                  colorStops: [{
-                    offset: 0,
-                    color: 'blue'
-                  }, {
-                    offset: 1,
-                    color: 'red'
-                  }]
-                },
+                type: "extra-rounded",
               },
               imageOptions: {
                 crossOrigin: "anonymous",
                 margin: 30
+              },
+              cornersDotOptions: {
+                type: 'drop-in'
               }
             };
           const qrCode = new QRCodeStyling(options);
@@ -45,9 +33,18 @@
             ...options,
             type: 'svg',
           });
+          const qrCode3 = new QRCodeStyling({
+            ...options, cornersSquareOptions: {
+                ...options.cornersSquareOptions,
+                type: 'drop-in',
+                gradient: false
+            },
+            type: 'svg',
+          });
 
-            qrCode.append(document.getElementById("canvas"));
-            qrCode2.append(document.getElementById("canvas2"));
+          // qrCode.append(document.getElementById("canvas"));
+          // qrCode2.append(document.getElementById("canvas2"));
+          qrCode3.append(document.getElementById("canvas3"));
 
             // qrCode2.download()
         </script>

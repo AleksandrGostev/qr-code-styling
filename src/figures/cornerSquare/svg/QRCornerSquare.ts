@@ -22,6 +22,9 @@ export default class QRCornerSquare {
       case cornerSquareTypes.extraRounded:
         drawFunction = this._drawExtraRounded;
         break;
+      case cornerSquareTypes.dropIn:
+        drawFunction = this._drawDropIn;
+        break;
       case cornerSquareTypes.dot:
       default:
         drawFunction = this._drawDot;
@@ -35,7 +38,10 @@ export default class QRCornerSquare {
     const cy = y + size / 2;
 
     draw();
-    this._element?.setAttribute("transform", `rotate(${(180 * rotation) / Math.PI},${cx},${cy})`);
+    const transformAttr = this._element?.getAttribute("transform");
+    const rotate = `rotate(${(180 * rotation) / Math.PI},${cx},${cy})`;
+    const newTransformAttr = transformAttr ? `${transformAttr} ${rotate}` : rotate;
+    this._element?.setAttribute("transform", newTransformAttr);
   }
 
   _basicDot(args: BasicFigureDrawArgs): void {
@@ -120,6 +126,40 @@ export default class QRCornerSquare {
     });
   }
 
+  _basicDropIn(args: BasicFigureDrawArgs): void {
+    const { size, x, y } = args;
+    const dotSize = size / 7;
+
+    this._rotateFigure({
+      ...args,
+      rotation: args.rotation === 0 ? 3.15 : (args.rotation || 0) * 3,
+      draw: () => {
+        this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this._element.setAttribute("clip-rule", "evenodd");
+        const elAttr =
+          `M ${x} ${y + 2.5 * dotSize}` +
+          `v ${2 * dotSize}` +
+          `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${dotSize * 2.5}` +
+          `h ${2 * dotSize}` +
+          `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${dotSize * 2.5} ${-dotSize * 2.5}` +
+          `v ${-2 * dotSize}` +
+          `a ${2.5 * dotSize} ${2.5 * dotSize}, 0, 0, 0, ${-dotSize * 2.5} ${-dotSize * 2.5}` +
+          `h ${-2 * dotSize}` +
+          `a 0, 0, 0, 0, 0, ${-dotSize * 2.5} 0` +
+          `M ${x + 2.5 * dotSize} ${y + dotSize}` +
+          `h ${2 * dotSize}` +
+          `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${dotSize * 1.5} ${dotSize * 1.5}` +
+          `v ${2 * dotSize}` +
+          `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${dotSize * 1.5}` +
+          `h ${-2 * dotSize}` +
+          `a ${1.5 * dotSize} ${1.5 * dotSize}, 0, 0, 1, ${-dotSize * 1.5} ${-dotSize * 1.5}` +
+          `v ${-2 * dotSize}` +
+          `a 0 0, 0, 0, 1, 0 ${-dotSize * 1.5}`;
+        this._element.setAttribute("d", elAttr);
+      }
+    });
+  }
+
   _drawDot({ x, y, size, rotation }: DrawArgs): void {
     this._basicDot({ x, y, size, rotation });
   }
@@ -130,5 +170,9 @@ export default class QRCornerSquare {
 
   _drawExtraRounded({ x, y, size, rotation }: DrawArgs): void {
     this._basicExtraRounded({ x, y, size, rotation });
+  }
+
+  _drawDropIn({ x, y, size, rotation }: DrawArgs): void {
+    this._basicDropIn({ x, y, size, rotation });
   }
 }

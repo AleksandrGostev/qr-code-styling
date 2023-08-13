@@ -14,10 +14,12 @@ export default class QRCornerDot {
     const context = this._context;
     const type = this._type;
     let drawFunction;
-
     switch (type) {
       case cornerDotTypes.square:
         drawFunction = this._drawSquare;
+        break;
+      case cornerDotTypes.dropIn:
+        drawFunction = this._drawDropIn;
         break;
       case cornerDotTypes.dot:
       default:
@@ -66,6 +68,10 @@ export default class QRCornerDot {
   }
 
   _drawSquare({ x, y, size, context, rotation }: DrawArgsCanvas): void {
+    this._basicSquare({ x, y, size, context, rotation });
+  }
+
+  _drawDropIn({ x, y, size, context, rotation }: DrawArgsCanvas): void {
     this._basicSquare({ x, y, size, context, rotation });
   }
 }
