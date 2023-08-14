@@ -77,7 +77,6 @@ export default class QRCornerDot {
 
   _drawDropIn(args: DrawArgs): void {
     const { size, x, y } = args;
-    console.log(args);
 
     this._rotateFigure({
       ...args,
@@ -86,11 +85,11 @@ export default class QRCornerDot {
         this._element = document.createElementNS("http://www.w3.org/2000/svg", "path");
         this._element.setAttribute("clip-rule", "evenodd");
         const attr = `M ${x},${y}
-        h ${size / 1.1}
+        h ${size - 5}
         q 5,0 5,5
-        v ${size / 1.2}
+        v ${size - 10}
         q 0,5 -5,5
-        h ${size / -1.2}
+        h ${size * -1 + 10}
         q -5,0 -5,-5
         z`;
         this._element.setAttribute("d", attr);
